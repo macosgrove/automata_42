@@ -42,7 +42,7 @@ hsl100_to_rgb <- function(h, s, l) {
   hsl_to_rgb(h * 360 / 100, s / 100, l / 100)
 }
 
-setup <- function(w=100, h=50) {
+setup <- function(w = 100, h = 50) {
   quartz()
   width <<- w
   height <<- h
@@ -58,7 +58,7 @@ mainloop <- function() {
       universe_raster[x, y] <- hsl100_to_rgb(hue[x, y], sat[x, y], lum[x, y])
     }
   }
-  grid.raster(universe_raster)
+  grid.raster(universe_raster, interpolate = FALSE)
 }
 
 teardown <- function() {
