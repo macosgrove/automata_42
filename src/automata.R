@@ -49,10 +49,10 @@ setup <- function(w = 100, h = 50) {
   hue <<- matrix((0:(width - 1)) * 100 / (width - 1), nrow = height, ncol = width, byrow = TRUE)
   sat <<- matrix(100, nrow = height, ncol = width)
   lum <<- matrix((0:(height - 1)) * 100 / (height - 1), nrow = height, ncol = width)
+  universe_raster <<- matrix(0, height, width)
 }
 
 mainloop <- function() {
-  universe_raster <<- matrix(0, height, width)
   for (x in 1:height) {
     for (y in 1:width) {
       universe_raster[x, y] <- hsl100_to_rgb(hue[x, y], sat[x, y], lum[x, y])
@@ -62,9 +62,10 @@ mainloop <- function() {
 }
 
 teardown <- function() {
-  dev.off()
+  graphics.off()
 }
 
+teardown()
 setup()
 mainloop()
-teardown()
+
