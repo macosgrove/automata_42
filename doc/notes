@@ -1,1 +1,18 @@
+Useful reference book: Advanced R https://adv-r.hadley.nz/index.html
+
 About packages https://r-pkgs.org/intro.html 
+
+to detect keypress, tried using library tcltk. Library load failed with 
+Error: package or namespace load failed for ‘tcltk’:
+ .onLoad failed in loadNamespace() for 'tcltk', details:
+  call: dyn.load(file, DLLpath = DLLpath, ...)
+  error: unable to load shared object '/Library/Frameworks/R.framework/Versions/4.1/Resources/library/tcltk/libs/tcltk.so':
+  dlopen(/Library/Frameworks/R.framework/Versions/4.1/Resources/library/tcltk/libs/tcltk.so, 10): Library not loaded: /opt/X11/lib/libfontconfig.1.dylib
+  Referenced from: /usr/local/lib/libtk8.6.dylib
+  Reason: Incompatible library version: libtk8.6.dylib requires version 11.0.0 or later, but libfontconfig.1.dylib provides version 10.0.0
+
+Recommendation is to install XQuartz from https://www.xquartz.org/
+Also need xcrun: `xcode-select --install` (after OSX upgrade)
+Worked after installing these.
+
+Documentation for tcltk is at https://www.tcl.tk/doc/
