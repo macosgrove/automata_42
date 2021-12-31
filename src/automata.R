@@ -1,64 +1,43 @@
 require("grid")
-# https://stackoverflow.com/questions/28562288/how-to-use-the-hsl-hue-saturation-lightness-cylindric-color-model
-# specify h as whole input degrees (e.g 0-360)
-# s = 0.0 - 1 (0 - 100%)
-# l = 0.0 - 1, (0 - 100%)
-# returns output from R's rgb() function
-hsl_to_rgb <- function(h, s, l) {
-  h <- h / 360
-  r <- g <- b <- 0.0
-  if (s == 0) {
-    r <- g <- b <- l
-  } else {
-    hue_to_rgb <- function(p, q, t) {
-      if (t < 0) {
-        t <- t + 1.0
-      }
-      if (t > 1) {
-        t <- t - 1.0
-      }
-      if (t < 1 / 6) {
-        return(p + (q - p) * 6.0 * t)
-      }
-      if (t < 1 / 2) {
-        return(q)
-      }
-      if (t < 2 / 3) {
-        return(p + ((q - p) * ((2 / 3) - t) * 6))
-      }
-      return(p)
-    }
-    q <- ifelse(l < 0.5, l * (1.0 + s), l + s - (l * s))
-    p <- 2.0 * l - q
-    r <- hue_to_rgb(p, q, h + 1 / 3)
-    g <- hue_to_rgb(p, q, h)
-    b <- hue_to_rgb(p, q, h - 1 / 3)
-  }
-  return(rgb(r, g, b))
-}
+require("tcltk")
+require("numbers")
+require("pryr")
 
-# specify h, s and l in the range 0-100
-hsl100_to_rgb <- function(h, s, l) {
-  hsl_to_rgb(h * 360 / 100, s / 100, l / 100)
-}
+source("~/src/automata_42/src/colours.R")
 
-setup <- function(w = 100, h = 50) {
+setup <- function(w = 50, h = 20) {
   quartz()
   width <<- w
   height <<- h
-  hue <<- matrix((0:(width - 1)) * 100 / (width - 1), nrow = height, ncol = width, byrow = TRUE)
-  sat <<- matrix(100, nrow = height, ncol = width)
+  hue <<- matrix(40, nrow = height, ncol = width) # green
+  sat <<- matrix((0:(width - 1)) * 100 / (width - 1), nrow = height, ncol = width, byrow = TRUE)
   lum <<- matrix((0:(height - 1)) * 100 / (height - 1), nrow = height, ncol = width)
   universe_raster <<- matrix(0, height, width)
 }
 
 mainloop <- function() {
-  for (x in 1:height) {
-    for (y in 1:width) {
-      universe_raster[x, y] <- hsl100_to_rgb(hue[x, y], sat[x, y], lum[x, y])
+  tt <- tktoplevel()
+  key <- NA
+  tkbind(tt,'<Key>', function(k) { key <<- k } )
+  quit <- FALSE
+  while (!quit) {
+    for (x in 1:height) {
+      for (y in 1:width) {
+        universe_raster[x, y] <- hsl100_to_rgb(hue[x, y], sat[x, y], lum[x, y])
+        hue[x,y] <- mod(hue[x, y] + 10, 101)
+      }
+    }
+    grid.raster(universe_raster, interpolate = FALSE)
+    print(mem_used())
+    if(!is.na(key)) {
+      print(paste("Key detected: ", key))
+      if (key == 20) {
+        quit <- TRUE
+      }
+      key <- NA
     }
   }
-  grid.raster(universe_raster, interpolate = FALSE)
+  tkdestroy(tt)
 }
 
 teardown <- function() {
@@ -68,4 +47,3 @@ teardown <- function() {
 teardown()
 setup()
 mainloop()
-

@@ -1,6 +1,20 @@
 Useful reference book: Advanced R https://adv-r.hadley.nz/index.html
 
 About packages https://r-pkgs.org/intro.html 
+Blog post with guidance on first package: https://tinyheero.github.io/jekyll/update/2015/07/26/making-your-first-R-package.html
+
+Automated testing https://r-pkgs.org/tests.html
+
+Memory management http://adv-r.had.co.nz/memory.html
+
+Raster processing https://strimas.com/post/processing-large-rasters-in-r/
+Experiments show that with each call to `grid.raster`, more memory is consumed and the display takes longer. Let's explore the raster package instead. https://rspatial.org/raster/RasterPackage.pdf. help("raster-package")
+
+Raster package mentions using multiple cores via the snow package.
+
+
+
+User input - key press
 
 to detect keypress, tried using library tcltk. Library load failed with 
 Error: package or namespace load failed for ‘tcltk’:
@@ -15,4 +29,4 @@ Recommendation is to install XQuartz from https://www.xquartz.org/
 Also need xcrun: `xcode-select --install` (after OSX upgrade)
 Worked after installing these.
 
-Documentation for tcltk is at https://www.tcl.tk/doc/
+Documentation for tcltk is at https://www.tcl.tk/doc/. https://www.tcl.tk/man/tcl8.7/ is most useful page.
