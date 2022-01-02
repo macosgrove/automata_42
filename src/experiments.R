@@ -1,4 +1,8 @@
 # Experiment with raster image
+require("raster")
+require("tcltk")
+require("pryr")
+require("grid")
 
 mem_experiment_plotrgb_raster <- function(width = 1000, height = 1000) {
   r <- raster(matrix(0, ncol = width, nrow = height))
@@ -38,67 +42,45 @@ mem_experiment_grid_raster <- function(width = 1000, height = 1000) {
 
 
 # > mem_experiment_plotrgb_raster()
-# 313 MB
-# 317 MB
+# 213 MB
+# 223 MB
 # user  system elapsed 
-# 0.282   0.054   0.337 
-# 321 MB
+# 0.616   0.098   0.710 
+# 227 MB
 # user  system elapsed 
-# 0.253   0.044   0.298 
-# 325 MB
+# 0.356   0.067   0.420 
+# 231 MB
 # user  system elapsed 
-# 0.254   0.042   0.296 
-# 329 MB
+# 0.276   0.035   0.311 
+# ...(94 more, then)
+# 287 MB
 # user  system elapsed 
-# 0.248   0.042   0.289 
-# 333 MB
+# 0.252   0.044   0.295 
+# 287 MB
 # user  system elapsed 
-# 0.251   0.042   0.292 
-# 338 MB
+# 0.259   0.045   0.303 
+# 287 MB
 # user  system elapsed 
-# 0.244   0.042   0.286 
-# 338 MB
-# user  system elapsed 
-# 0.242   0.041   0.283 
-# 342 MB
-# user  system elapsed 
-# 0.250   0.042   0.291 
-# 346 MB
-# user  system elapsed 
-# 0.263   0.062   0.324 
-# 350 MB
-# user  system elapsed 
-# 0.262   0.057   0.319 
+# 0.251   0.043   0.294 
 
 # > mem_experiment_grid_raster()
-# 358 MB
-# 366 MB
+# 234 MB
+# 242 MB
 # user  system elapsed 
-# 0.077   0.011   0.087 
-# 374 MB
+# 0.057   0.011   0.067 
+# 250 MB
 # user  system elapsed 
-# 0.080   0.008   0.087 
-# 382 MB
+# 0.060   0.009   0.071 
+# 258 MB
 # user  system elapsed 
-# 0.083   0.004   0.088 
-# 390 MB
+# 0.065   0.006   0.072 
+# ...(94 more, then)
+# 1.02 GB
 # user  system elapsed 
-# 0.090   0.006   0.096 
-# 398 MB
+# 1.103   0.126   1.230 
+# 1.03 GB
 # user  system elapsed 
-# 0.092   0.005   0.098 
-# 406 MB
+# 1.091   0.125   1.216 
+# 1.03 GB
 # user  system elapsed 
-# 0.096   0.004   0.100 
-# 414 MB
-# user  system elapsed 
-# 0.101   0.004   0.104 
-# 422 MB
-# user  system elapsed 
-# 0.109   0.005   0.115 
-# 430 MB
-# user  system elapsed 
-# 0.112   0.006   0.118 
-# 438 MB
-# user  system elapsed 
-# 0.118   0.005   0.123 
+# 1.117   0.129   1.245 
