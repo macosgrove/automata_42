@@ -23,7 +23,7 @@ mem_experiment_plotrgb_raster <- function(width = 1000, height = 1000) {
 mem_experiment_grid_raster <- function(width = 1000, height = 1000) {
   hue <- (matrix(40, ncol = width, nrow = height)) 
   sat <- (matrix((0:(width - 1)) * 100 / (width - 1), ncol = width, nrow = height))
-  lum <- (matrix((0:(height - 1)) * 100 / (height - 1), ncol = width, nrow = height))
+  lum <- (matrix((0:(height - 1)) * 100 / (height - 1), ncol = width, nrow = height, byrow = TRUE))
   universe_raster <- (matrix(0, ncol = width, nrow = height)) 
   for (x in 1:height) {
     for (y in 1:width) {
