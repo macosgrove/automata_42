@@ -1,86 +1,117 @@
-# Experiment with raster image
-require("raster")
-require("tcltk")
-require("pryr")
-require("grid")
+# Experiment with calc
 
-mem_experiment_plotrgb_raster <- function(width = 1000, height = 1000) {
-  r <- raster(matrix(0, ncol = width, nrow = height))
-  g <- raster(matrix((0:(width - 1)) * 255 / (width - 1), ncol = width, nrow = height))
-  b <- raster(matrix((0:(height - 1)) * 255 / (height - 1), ncol = width, nrow = height, byrow = TRUE))
-  s <- stack(r, g, b)
-  crs(s) <- "+proj=longlat"
-  print(mem_used())
-  for (t in 1:100) {
-    time <- system.time({
-      plotRGB(s, r = 1, g = 2, b = 3)
-    })
-    print(mem_used())
-    print(time)
-  }
+one <<- raster(matrix(1:12, nrow=3, ncol=4))
+
+two <<- one * 2
+
+s <<- stack(one, two)
+names(s) <- c("one", "two")
+
+my_func_1 <- function(x) {
+  c(x["one"] + x["two"], x["one"] - x["two"], x["one"] * x["two"], x["one"]/x["two"])
 }
 
-mem_experiment_grid_raster <- function(width = 1000, height = 1000) {
-  hue <- (matrix(40, ncol = width, nrow = height)) 
-  sat <- (matrix((0:(width - 1)) * 100 / (width - 1), ncol = width, nrow = height))
-  lum <- (matrix((0:(height - 1)) * 100 / (height - 1), ncol = width, nrow = height, byrow = TRUE))
-  universe_raster <- (matrix(0, ncol = width, nrow = height)) 
-  for (x in 1:height) {
-    for (y in 1:width) {
-      universe_raster[x, y] <- hsl100_to_rgb(hue[x, y], sat[x, y], lum[x, y])
-    }
-  }
-  print(mem_used())
-  for (t in 1:100) {
-    time <- system.time({
-      grid.raster(universe_raster, interpolate = FALSE)
-    })
-    print(mem_used())
-    print(time)
-  }
+my_func_2 <- function(x) {
+  c(x[1] + x[2], x[1] - x[2], x[1] * x[2], x[1]/x[2])
 }
 
+my_func_3 <- function(x) {
+  x[2] - x[1]/2
+}
 
-# > mem_experiment_plotrgb_raster()
-# 213 MB
-# 223 MB
-# user  system elapsed 
-# 0.616   0.098   0.710 
-# 227 MB
-# user  system elapsed 
-# 0.356   0.067   0.420 
-# 231 MB
-# user  system elapsed 
-# 0.276   0.035   0.311 
-# ...(94 more, then)
-# 287 MB
-# user  system elapsed 
-# 0.252   0.044   0.295 
-# 287 MB
-# user  system elapsed 
-# 0.259   0.045   0.303 
-# 287 MB
-# user  system elapsed 
-# 0.251   0.043   0.294 
+result_1 <<- calc(s, my_func_1)
+result_2 <<- calc(s, my_func_2)
+result_3 <<- calc(s, my_func_3)
 
-# > mem_experiment_grid_raster()
-# 234 MB
-# 242 MB
-# user  system elapsed 
-# 0.057   0.011   0.067 
-# 250 MB
-# user  system elapsed 
-# 0.060   0.009   0.071 
-# 258 MB
-# user  system elapsed 
-# 0.065   0.006   0.072 
-# ...(94 more, then)
-# 1.02 GB
-# user  system elapsed 
-# 1.103   0.126   1.230 
-# 1.03 GB
-# user  system elapsed 
-# 1.091   0.125   1.216 
-# 1.03 GB
-# user  system elapsed 
-# 1.117   0.129   1.245 
+print("Three results")
+print(result_1)
+print(result_2)
+print(result_3)
+print("")
+print("Result 1 values")
+print(values(result_1[[1]]))
+print(values(result_1))
+print("Result 2 as matrix")
+print(as.matrix(result_2))
+print("result 3 values")
+print(values(result_3))
+print("result 3 as matrix")
+print(as.matrix(result_3))
+
+
+
+
+# the function takes a vector - the set of cells through the layers of the stack
+# Within the function, the values of the stack can be addressed by name or index.
+# If it returns a vector, the result is a RasterBrick composed of the returned vectors.
+# If it returns a single value, the result is a RasterLayer of all returned values.
+# You can use s[[n]] to return a layer from a stack or brick, and as.matrix to return its values.
+# 
+# 
+# [1] "Three results"
+# class      : RasterBrick 
+# dimensions : 3, 4, 12, 4  (nrow, ncol, ncell, nlayers)
+# resolution : 0.25, 0.3333333  (x, y)
+# extent     : 0, 1, 0, 1  (xmin, xmax, ymin, ymax)
+# crs        : NA 
+# source     : memory
+# names      : one.1, one.2, one.3, one.4 
+# min values :   3.0, -12.0,   2.0,   0.5 
+# max values :  36.0,  -1.0, 288.0,   0.5 
+# 
+# class      : RasterBrick 
+# dimensions : 3, 4, 12, 4  (nrow, ncol, ncell, nlayers)
+# resolution : 0.25, 0.3333333  (x, y)
+# extent     : 0, 1, 0, 1  (xmin, xmax, ymin, ymax)
+# crs        : NA 
+# source     : memory
+# names      : one.1, one.2, one.3, one.4 
+# min values :   3.0, -12.0,   2.0,   0.5 
+# max values :  36.0,  -1.0, 288.0,   0.5 
+# 
+# class      : RasterLayer 
+# dimensions : 3, 4, 12  (nrow, ncol, ncell)
+# resolution : 0.25, 0.3333333  (x, y)
+# extent     : 0, 1, 0, 1  (xmin, xmax, ymin, ymax)
+# crs        : NA 
+# source     : memory
+# names      : layer 
+# values     : 1.5, 18  (min, max)
+# 
+# [1] ""
+# [1] "Result 1 values"
+# [1]  3 12 21 30  6 15 24 33  9 18 27 36
+# one.1 one.2 one.3 one.4
+# [1,]     3    -1     2   0.5
+# [2,]    12    -4    32   0.5
+# [3,]    21    -7    98   0.5
+# [4,]    30   -10   200   0.5
+# [5,]     6    -2     8   0.5
+# [6,]    15    -5    50   0.5
+# [7,]    24    -8   128   0.5
+# [8,]    33   -11   242   0.5
+# [9,]     9    -3    18   0.5
+# [10,]    18    -6    72   0.5
+# [11,]    27    -9   162   0.5
+# [12,]    36   -12   288   0.5
+# [1] "Result 2 as matrix"
+# one.1 one.2 one.3 one.4
+# [1,]     3    -1     2   0.5
+# [2,]    12    -4    32   0.5
+# [3,]    21    -7    98   0.5
+# [4,]    30   -10   200   0.5
+# [5,]     6    -2     8   0.5
+# [6,]    15    -5    50   0.5
+# [7,]    24    -8   128   0.5
+# [8,]    33   -11   242   0.5
+# [9,]     9    -3    18   0.5
+# [10,]    18    -6    72   0.5
+# [11,]    27    -9   162   0.5
+# [12,]    36   -12   288   0.5
+# [1] "result 3 values"
+# [1]  1.5  6.0 10.5 15.0  3.0  7.5 12.0 16.5  4.5  9.0 13.5 18.0
+# [1] "result 3 as matrix"
+# [,1] [,2] [,3] [,4]
+# [1,]  1.5  6.0 10.5 15.0
+# [2,]  3.0  7.5 12.0 16.5
+# [3,]  4.5  9.0 13.5 18.0
