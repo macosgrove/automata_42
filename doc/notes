@@ -9,8 +9,12 @@ Memory management http://adv-r.had.co.nz/memory.html
 
 Raster processing https://strimas.com/post/processing-large-rasters-in-r/
 Experiments show that with each call to `grid.raster`, more memory is consumed and the display takes longer. Let's explore the raster package instead. https://rspatial.org/raster/RasterPackage.pdf. help("raster-package")
+install.packages("raster")
+Raster requires "terra" which is huge. Download times out. I had to visit http://mirror.aarnet.edu.au/pub/CRAN/bin/macosx/contrib/4.1/ and download it manually, then install from the local file with install.packages("~/Downloads/terra_1.4-22.tgz", repos=NULL, type="source")
 
 Raster package mentions using multiple cores via the snow package.
+
+Probably need to learn about S4 (and S3 as a pre-requisite for S4) to understand Raster well.
 
 
 
