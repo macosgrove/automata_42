@@ -1,7 +1,7 @@
 initialise <- function(width, height) {
   hue <- raster(matrix(40, ncol = width, nrow = height)) 
-  sat <- raster(matrix((0:(width - 1)) * 100 / (width - 1), ncol = width, nrow = height, byrow=TRUE))
-  lum <- raster(matrix((0:(height - 1)) * 100 / (height - 1), ncol = width, nrow = height))
+  sat <- raster(matrix(as.integer((0:(width - 1)) * 255 / (width - 1)), ncol = width, nrow = height, byrow=TRUE))
+  lum <- raster(matrix(as.integer((0:(height - 1)) * 255 / (height - 1)), ncol = width, nrow = height))
   universe <- brick(hue, sat, lum)
   names(universe) <- c("hue", "sat", "lum")
   crs(universe) <- "+proj=longlat" # Remove warnings
@@ -10,9 +10,13 @@ initialise <- function(width, height) {
 }
 
 evolve <- function(universe) {
-  calc(universe, rotate_hue)
+  calc(universe, rotate_sat)
 }
 
 rotate_hue <- function(hsl) {
-  c(mod(hsl["hue"] + 2, 100), hsl["sat"], hsl["lum"])
+  c(mod(hsl["hue"] + 2, 255), hsl["sat"], hsl["lum"])
+}
+
+rotate_sat <- function(hsl) {
+  c(hsl["hue"], mod(hsl["sat"] + 2, 255), hsl["lum"])
 }

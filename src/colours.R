@@ -1,7 +1,7 @@
 # https://stackoverflow.com/questions/28562288/how-to-use-the-hsl-hue-saturation-lightness-cylindric-color-model
 # specify h as whole input degrees (e.g 0-360)
-# s = 0.0 - 1 (0 - 100%)
-# l = 0.0 - 1, (0 - 100%)
+# s = 0.0 - 1 (0 - 255)
+# l = 0.0 - 1, (0 - 255)
 # returns output from R's rgb() function
 hsl_to_rgb <- function(h, s, l) {
   h <- h / 360
@@ -36,17 +36,17 @@ hsl_to_rgb <- function(h, s, l) {
   c(round(r * 255), round(g * 255), round(b * 255))
 }
 
-# specify h, s and l in the range 0-100
+# specify h, s and l in the range 0-255
 hsl100_to_rgb <- function(h, s, l) {
-  hsl_to_rgb(h * 360 / 100, s / 100, l / 100)
+  hsl_to_rgb(h * 360 / 255, s / 255, l / 255)
 }
 
 # function designed to be applied to stacks via "calc", 
 #   eg calc(hsl_stack, hsl_stack_to_rgb) returns a RasterBrick with layers for rgb
 
 hsl_stack_to_rgb <- function(hsl) {
-  h = hsl[1] * 360 / 100
-  s = hsl[2] / 100
-  l = hsl[3] / 100
+  h = hsl[1] * 360 / 255
+  s = hsl[2] / 255
+  l = hsl[3] / 255
   hsl_to_rgb(h, s, l)
 }
