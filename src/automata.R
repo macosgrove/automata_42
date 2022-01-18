@@ -15,6 +15,15 @@ main <- function(width =10, height = 5) {
   universe <- initialise(width, height)
   # print(universe)
   
+  options(error = function() {
+    sink(stderr())
+    on.exit(sink(NULL))
+    traceback(3, max.lines = 1L)
+    if (!interactive()) {
+      q(status = 1)
+    }
+  })
+  
   times <- c()
   while (!quit) {
     time <- system.time({
