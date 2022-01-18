@@ -10,11 +10,21 @@ initialise <- function(width, height) {
 }
 
 evolve <- function(universe) {
-  calc(universe, rotate_sat)
+  for(c in 2:(ncol(universe)-1)) {
+    for(r in 2:(nrow(universe)-1)) {
+      region = crop(universe, extent(universe, r-1, r+1, c-1, c+1))
+      universe[r,c] <- rotate_hue(region)
+    }
+  }
+  universe
 }
 
-rotate_hue <- function(hsl) {
-  c(mod(hsl["hue"] + 2, 255), hsl["sat"], hsl["lum"])
+# rotate_hue <- function(hsl) {
+#   c(mod(hsl["hue"] + 2, 255), hsl["sat"], hsl["lum"])
+# }
+
+rotate_hue <- function(region) {
+  c(mod(region[2,2][1] + 2, 255), region[2,2][2], region[2,2][3])
 }
 
 rotate_sat <- function(hsl) {
