@@ -15,6 +15,7 @@ main <- function(width =10, height = 5) {
   universe <- initialise(width, height)
   # print(universe)
   
+  times <- c()
   while (!quit) {
     time <- system.time({
       universe_rgb <- calc(universe, hsl_stack_to_rgb)
@@ -31,9 +32,9 @@ main <- function(width =10, height = 5) {
       }
     })
     # print(mem_used())
-    print(time)
+    times <- c(times, time)
   }
-  
+  print(mean(times))
   tkdestroy(tt)
   graphics.off()
 }
