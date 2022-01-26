@@ -19,14 +19,6 @@ evolve <- function(universe) {
   universe
 }
 
-# rotate_hue <- function(hsl) {
-#   c(mod(hsl["hue"] + 2, 255), hsl["sat"], hsl["lum"])
-# }
-
 rotate_hue <- function(region) {
   c(mod(region[2,2][1] + 2, 255), region[2,2][2], region[2,2][3])
-}
-
-rotate_sat <- function(hsl) {
-  c(hsl["hue"], mod(hsl["sat"] + 2, 255), hsl["lum"])
 }

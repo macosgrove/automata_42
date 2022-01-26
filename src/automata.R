@@ -4,9 +4,9 @@ require("numbers")
 require("pryr")
 
 source("~/src/automata_42/src/colours.R")
-source("~/src/automata_42/evolution.R")
+source("~/src/automata_42/src/evolution.R")
 
-main <- function(width =10, height = 5) {
+main <- function(width =100, height = 50) {
   quartz()
   tt <- tktoplevel()
   key <- NA
@@ -43,7 +43,7 @@ main <- function(width =10, height = 5) {
     # print(mem_used())
     times <- c(times, time)
   }
-  print(mean(times))
+  print(paste("Mean time taken: ", mean(times)))
   tkdestroy(tt)
   graphics.off()
 }
