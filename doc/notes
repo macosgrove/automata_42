@@ -2,3 +2,7 @@ R proved too slow.
 
 Switching to rust
 https://doc.rust-lang.org/book
+
+Standard library doco: https://doc.rust-lang.org/std/prelude/index.html
+
+cargo doc --open
