@@ -5,4 +5,10 @@ https://doc.rust-lang.org/book
 
 Standard library doco: https://doc.rust-lang.org/std/prelude/index.html
 
+Raster graphics in Rust https://rustrepo.com/tag/raster-graphics
+
+Best option seems to be https://github.com/epilys/bitmappers-companion
+PDF of the book is in /doc
+
+cargo run // Compile and run the app
 cargo doc --open
