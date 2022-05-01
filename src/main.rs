@@ -1,4 +1,5 @@
-use automata_42::lib::{Image, AZURE_BLUE, WHITE};
+mod lib;
+use lib::{Image, WHITE, AZURE_BLUE};
 
 use minifb::{Key, Window, WindowOptions};
 const WINDOW_WIDTH: usize = 400;
