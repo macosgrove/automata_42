@@ -12,3 +12,14 @@ PDF of the book is in /doc
 
 cargo run // Compile and run the app
 cargo doc --open
+
+https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html
+"Rust has a special annotation called the Copy trait that we can place on types that are stored on the stack like integers are (we’ll talk more about traits in Chapter 10). If a type implements the Copy trait, a variable is still valid after assignment to another variable."
+
+Consider using for switching between universe being displayed and universe being evolved?
+Aim to store two copies of universe in the stack?
+
+"We’re not allowed to modify something we have a reference to." unless you create a mutable reference &mut x
+
+
+Reading: https://doc.rust-lang.org/book/ch17-03-oo-design-patterns.html
