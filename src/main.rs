@@ -16,6 +16,7 @@ fn main() {
     // eventually, run these in parallel {
       universe.evolve();
       canvas.place(universe.render());
+      canvas.sleep();
     // }
   }
 }

@@ -1,7 +1,7 @@
 use minifb::{Key, Window, WindowOptions};
 
 
-use crate::colours::{WHITE, AZURE_BLUE};
+use crate::colours::{WHITE};
 use crate::image::{Image};
 
 pub struct Canvas {
@@ -14,7 +14,7 @@ pub const WINDOW_HEIGHT:usize = 800;
 
 impl Canvas {
   pub fn new() -> Self {
-    let mut buffer: Vec<u32> = vec![WHITE; WINDOW_WIDTH * WINDOW_HEIGHT];
+    let buffer: Vec<u32> = vec![WHITE; WINDOW_WIDTH * WINDOW_HEIGHT];
     let mut window = Window::new(
       "Test - ESC to exit",
       WINDOW_WIDTH,
@@ -45,7 +45,7 @@ impl Canvas {
   }
 
   pub fn place(&mut self, image : Image) {
-    image.draw(&mut self.buffer, AZURE_BLUE, None, WINDOW_WIDTH);
+    image.draw(&mut self.buffer, WINDOW_WIDTH);
     self.window
       .update_with_buffer(&self.buffer, WINDOW_WIDTH, WINDOW_HEIGHT)
       .unwrap();
