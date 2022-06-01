@@ -1,7 +1,7 @@
 use crate::colours::{WHITE, BLACK};
 
 pub struct Image {
-  pub bytes: Vec<u32>,
+  pub bytes: Vec<Vec<u32>>,
   pub width: usize,
   pub height: usize,
 }
@@ -9,7 +9,7 @@ pub struct Image {
 impl Image {
   pub fn new(width: usize, height: usize) -> Self {
     Image {
-        bytes: vec![WHITE; width * height],
+        bytes: vec![vec![WHITE; height]; width],
         width,
         height,
     }
@@ -19,7 +19,7 @@ impl Image {
       for y in 0..self.height-1 {
           for x in 0..self.width-1 {
               buffer[y * window_width + x] =
-                  self.bytes[y * self.width + x];
+                  self.bytes[x][y];
           }
       }
   }
@@ -29,6 +29,6 @@ impl Image {
         //eprintln!("invalid plot() coors: ({}, {})", x, y);
         return;
     }
-    self.bytes[y * self.width + x] = color.unwrap_or(BLACK);
+    self.bytes[x][y] = color.unwrap_or(BLACK);
   }
 }

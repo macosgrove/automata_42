@@ -35,11 +35,6 @@ impl Canvas {
     }
   }
 
-  pub fn sleep(&self) {
-    let millis = std::time::Duration::from_millis(100);
-    std::thread::sleep(millis);
-  }
-
   pub fn cont(&self) -> bool {
     self.window.is_open() && !self.window.is_key_down(Key::Escape) && !self.window.is_key_down(Key::Q)
   }

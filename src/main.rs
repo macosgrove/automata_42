@@ -16,7 +16,13 @@ fn main() {
     // eventually, run these in parallel {
       universe.evolve();
       canvas.place(universe.render());
-      canvas.sleep();
+      sleep();
     // }
   }
+
+  fn sleep() {
+    let millis = std::time::Duration::from_millis(100);
+    std::thread::sleep(millis);
+  }
+
 }
