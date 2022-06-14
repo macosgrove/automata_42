@@ -24,7 +24,17 @@ impl Image {
       }
   }
 
-  pub fn plot(&mut self, x: usize, y: usize, color: Option<u32>) {
+  pub fn stretch_draw(&self, buffer: &mut Vec<u32>, window_width: usize, window_height: usize) {
+    for y in 0..self.height-1 {
+        for x in 0..self.width-1 {
+            buffer[y * window_width + x] =
+                self.bytes[x][y];
+        }
+    }
+}
+
+//This should be on canvas, and image functions should take canvas instead of buffer?
+pub fn plot(&mut self, x: usize, y: usize, color: Option<u32>) {
     if y >= self.height || x >= self.width {
         //eprintln!("invalid plot() coors: ({}, {})", x, y);
         return;

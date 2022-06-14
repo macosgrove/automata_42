@@ -1,36 +1,25 @@
-use minifb::{Key, Window, WindowOptions};
-
+use minifb::{Key, Window};
 
 use crate::colours::{WHITE};
 use crate::image::{Image};
 
 pub struct Canvas {
   window: Window,
+  width: usize,
+  height: usize,
   buffer: Vec<u32>,
 }
 
-pub const WINDOW_WIDTH:usize = 800;
-pub const WINDOW_HEIGHT:usize = 800;
-
 impl Canvas {
-  pub fn new() -> Self {
-    let buffer: Vec<u32> = vec![WHITE; WINDOW_WIDTH * WINDOW_HEIGHT];
-    let mut window = Window::new(
-      "Test - ESC to exit",
-      WINDOW_WIDTH,
-      WINDOW_HEIGHT,
-      WindowOptions {
-        title: true,
-        //borderless: true,
-        //resize: false,
-        //transparency: true,
-        ..WindowOptions::default()
-      },
-    ).unwrap();
-    // Limit to max ~60 fps update rate
-    window.limit_update_rate(Some(std::time::Duration::from_micros(16600)));
+  pub fn new(window: Window) -> Self {
+    let size = window.get_size();
+    let width = size.0;
+    let height = size.1;
+    let buffer: Vec<u32> = vec![WHITE; width * height];
     Canvas {
       window,
+      width,
+      height,
       buffer
     }
   }
@@ -40,9 +29,17 @@ impl Canvas {
   }
 
   pub fn place(&mut self, image : Image) {
-    image.draw(&mut self.buffer, WINDOW_WIDTH);
+    image.draw(&mut self.buffer, self.width);
     self.window
-      .update_with_buffer(&self.buffer, WINDOW_WIDTH, WINDOW_HEIGHT)
+      .update_with_buffer(&self.buffer, self.width, self.height)
       .unwrap();
   }
+
+  pub fn fill(&mut self, image : Image) {
+    image.stretch_draw(&mut self.buffer, self.width, self.height);
+    self.window
+      .update_with_buffer(&self.buffer, self.width, self.height)
+      .unwrap();
+  }
+
 }
