@@ -1,4 +1,5 @@
 use crate::colours::{WHITE, BLACK};
+use crate::Canvas;
 
 pub struct Image {
   pub bytes: Vec<Vec<u32>>,
@@ -15,30 +16,26 @@ impl Image {
     }
   }
 
-  pub fn draw(&self, buffer: &mut Vec<u32>, window_width: usize) {
-      for y in 0..self.height-1 {
-          for x in 0..self.width-1 {
-              buffer[y * window_width + x] =
-                  self.bytes[x][y];
-          }
+  pub fn draw(&self, canvas: &mut Canvas) {
+    for y in 0..self.height-1 {
+      for x in 0..self.width-1 {
+          canvas.plot(x, y, self.bytes[x][y]);
       }
+    }
   }
 
-  pub fn stretch_draw(&self, buffer: &mut Vec<u32>, window_width: usize, window_height: usize) {
+  pub fn stretch_draw(&self, canvas: &mut Canvas) {
     for y in 0..self.height-1 {
         for x in 0..self.width-1 {
-            buffer[y * window_width + x] =
-                self.bytes[x][y];
+            canvas.plot(x, y, self.bytes[x][y]);
         }
     }
-}
+  }
 
-//This should be on canvas, and image functions should take canvas instead of buffer?
-pub fn plot(&mut self, x: usize, y: usize, color: Option<u32>) {
-    if y >= self.height || x >= self.width {
-        //eprintln!("invalid plot() coors: ({}, {})", x, y);
+  pub fn plot(&mut self, x: usize, y: usize, colour: u32) {
+    if x >= self.width || y >= self.height  {
         return;
     }
-    self.bytes[x][y] = color.unwrap_or(BLACK);
+    self.bytes[x][y] = colour;
   }
 }

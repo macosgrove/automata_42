@@ -20,11 +20,18 @@ impl Canvas {
   }
 
   pub fn place(&mut self, image : Image) {
-    image.draw(&mut self.buffer, self.width);
+    image.draw(self);
   }
 
   pub fn fill(&mut self, image : Image) {
-    image.stretch_draw(&mut self.buffer, self.width, self.height);
+    image.stretch_draw(self);
+  }
+
+  pub fn plot(&mut self, x: usize, y: usize, colour: u32) {
+    if x >= self.width || y >= self.height  {
+      return;
+    }
+    self.buffer[y * self.width + x] = colour;
   }
 
 }

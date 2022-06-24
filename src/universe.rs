@@ -28,7 +28,7 @@ impl Universe {
     let mut rendered: Image = Image::new(UNIVERSE_WIDTH, UNIVERSE_HEIGHT);
     for y in 0..UNIVERSE_HEIGHT-1 {
       for x in 0..UNIVERSE_WIDTH-1 {
-          rendered.plot(x, y, Some(self.cells[x][y]));
+          rendered.plot(x, y, self.cells[x][y]);
       }
     }
     rendered
