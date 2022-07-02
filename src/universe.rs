@@ -1,8 +1,8 @@
 use rand::prelude::*;
 use crate::image::{Image};
 
-pub const UNIVERSE_WIDTH:usize = 200;
-pub const UNIVERSE_HEIGHT:usize = 100;
+pub const UNIVERSE_WIDTH:usize = 2;
+pub const UNIVERSE_HEIGHT:usize = 3;
 
 pub struct Universe {
   cells: [[u32; UNIVERSE_HEIGHT]; UNIVERSE_WIDTH],
