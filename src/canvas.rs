@@ -6,15 +6,6 @@ pub struct Point {
   pub y: usize,
 }
 
-impl Point {
-  pub fn new(x: usize, y: usize) -> Self {
-    Point {
-      x,
-      y,
-    }
-  }
-}
-
 pub struct Canvas {
   // Canvas converts world coordinates to screen coordinates
   screen_width: usize,
@@ -61,7 +52,7 @@ impl Canvas {
     let y = (self.screen_height - (n.div_euclid(self.screen_width))) * height_factor;
     println!("height factor:{}, width_factor:{}", height_factor, width_factor);
     println!("n:{} x:{} y:{} ", n, x, y);
-    return Point::new(x, y)
+    return Point {x, y}
   }
 
 
