@@ -21,18 +21,18 @@ fn main() {
   let mut canvas = Canvas::new(WINDOW_WIDTH, WINDOW_HEIGHT, UNIVERSE_WIDTH, UNIVERSE_HEIGHT);
   let mut universe = Universe::new();
 
-  // while !window.shutdown() {
-    // eventually, run these in parallel {
+  while !window.shutdown() {
+    // eventually, run these in parallel
+    {
       universe.evolve();
       canvas.fill(universe.render());
       window.update(&canvas.buffer);
       sleep();
-    // }
-  // }
+    }
+  }
 
   fn sleep() {
     let millis = std::time::Duration::from_millis(100);
     std::thread::sleep(millis);
   }
-
 }
