@@ -12,8 +12,8 @@ use graphics_window::{GraphicsWindow};
 
 fn main() {
 
-  const WINDOW_WIDTH:usize = 2;
-  const WINDOW_HEIGHT:usize = 3;
+  const WINDOW_WIDTH:usize = 1200;
+  const WINDOW_HEIGHT:usize = 800;
 
 
 
