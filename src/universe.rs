@@ -1,5 +1,4 @@
-use rand::prelude::*;
-use crate::image::{Image};
+use crate::image::Image;
 
 pub const UNIVERSE_WIDTH:usize = 300;
 pub const UNIVERSE_HEIGHT:usize = 200;

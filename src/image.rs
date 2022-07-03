@@ -1,5 +1,4 @@
-use crate::colours::{WHITE, BLACK};
-use crate::Canvas;
+use crate::colours::WHITE;
 
 pub struct Image {
   pub bytes: Vec<Vec<u32>>,
@@ -13,22 +12,6 @@ impl Image {
         bytes: vec![vec![WHITE; height]; width],
         width,
         height,
-    }
-  }
-
-  pub fn draw(&self, canvas: &mut Canvas) {
-    for y in 0..self.height-1 {
-      for x in 0..self.width-1 {
-          canvas.plot(x, y, self.bytes[x][y]);
-      }
-    }
-  }
-
-  pub fn stretch_draw(&self, canvas: &mut Canvas) {
-    for y in 0..self.height-1 {
-        for x in 0..self.width-1 {
-            canvas.plot(x, y, self.bytes[x][y]);
-        }
     }
   }
 

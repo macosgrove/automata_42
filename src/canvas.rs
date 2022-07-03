@@ -33,22 +33,11 @@ impl Canvas {
     }
   }
 
-  pub fn place(&mut self, image : Image) {
-    image.draw(self);
-  }
-
   pub fn fill(&mut self, image : Image) {
     for n in 0..(self.screen_width * self.screen_height)-1 {
       let pixel:Pixel = self.buffer_to_world(n);
       self.buffer[n] = image.bytes[pixel.x][pixel.y];
     }
-  }
-
-  pub fn plot(&mut self, x: usize, y: usize, colour: u32) {
-    if x >= self.world_width || y >= self.world_height  {
-      return;
-    }
-    self.buffer[y * self.screen_width + x] = colour;
   }
 
   fn buffer_to_screen(&self, n: usize) -> Pixel {
