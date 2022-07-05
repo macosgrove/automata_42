@@ -23,3 +23,5 @@ Aim to store two copies of universe in the stack?
 
 
 Reading: https://doc.rust-lang.org/book/ch17-03-oo-design-patterns.html
+
+Useful blog post on project structure and modules https://medium.com/codex/rust-modules-and-project-structure-832404a33e2e

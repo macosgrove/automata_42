@@ -8,17 +8,17 @@ pub struct Universe {
 }
 
 impl Universe {
-  pub fn new() -> Self {
-    let cells: [[u32; UNIVERSE_HEIGHT]; UNIVERSE_WIDTH] = [[0; UNIVERSE_HEIGHT]; UNIVERSE_WIDTH];
+  pub fn new(init: fn() -> u32) -> Self {
+    let cells: [[u32; UNIVERSE_HEIGHT]; UNIVERSE_WIDTH] = [[init(); UNIVERSE_HEIGHT]; UNIVERSE_WIDTH];
     Universe {
       cells,
     }
   }
 
-  pub fn evolve(&mut self) {
+  pub fn evolve(&mut self, calc_next_gen: fn() -> u32) {
     for y in 0..UNIVERSE_HEIGHT-1 {
       for x in 0..UNIVERSE_WIDTH-1 {
-        self.cells[x][y] = rand::random::<u32>();
+        self.cells[x][y] = calc_next_gen();
       }
     }
   }

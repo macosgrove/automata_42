@@ -1,5 +1,5 @@
 mod canvas;
-use canvas::{Canvas};
+use canvas::Canvas;
 
 mod universe;
 use universe::{Universe, UNIVERSE_WIDTH, UNIVERSE_HEIGHT};
@@ -7,7 +7,10 @@ use universe::{Universe, UNIVERSE_WIDTH, UNIVERSE_HEIGHT};
 mod colours;
 mod image;
 mod graphics_window;
-use graphics_window::{GraphicsWindow};
+use graphics_window::GraphicsWindow;
+
+mod evolution;
+use evolution::random::{evolve, init};
 
 
 fn main() {
@@ -15,16 +18,14 @@ fn main() {
   const WINDOW_WIDTH:usize = 1200;
   const WINDOW_HEIGHT:usize = 800;
 
-
-
   let mut window = GraphicsWindow::new(WINDOW_WIDTH, WINDOW_HEIGHT);
   let mut canvas = Canvas::new(WINDOW_WIDTH, WINDOW_HEIGHT, UNIVERSE_WIDTH, UNIVERSE_HEIGHT);
-  let mut universe = Universe::new();
+  let mut universe = Universe::new(init);
 
   while !window.shutdown() {
     // eventually, run these in parallel
     {
-      universe.evolve();
+      universe.evolve(evolve);
       canvas.fill(universe.render());
       window.update(&canvas.buffer);
       sleep();
