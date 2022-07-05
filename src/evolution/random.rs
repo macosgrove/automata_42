@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 pub fn init() -> u32 {
   return 0
 }

@@ -10,7 +10,7 @@ mod graphics_window;
 use graphics_window::GraphicsWindow;
 
 mod evolution;
-use evolution::random::{evolve, init};
+use evolution::conways::{evolve, init};
 
 
 fn main() {
