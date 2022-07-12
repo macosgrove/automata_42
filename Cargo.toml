@@ -12,3 +12,11 @@ regex = "1"
 
 [dev-dependencies]
 rstest = "0.15.0"
+
+[profile.dev]
+opt-level = 0
+debug = true
+
+[profile.release]
+opt-level = 3
+debug = false

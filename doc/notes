@@ -25,3 +25,8 @@ Aim to store two copies of universe in the stack?
 Reading: https://doc.rust-lang.org/book/ch17-03-oo-design-patterns.html
 
 Useful blog post on project structure and modules https://medium.com/codex/rust-modules-and-project-structure-832404a33e2e
+
+Rust by example https://doc.rust-lang.org/rust-by-example (up to 1.2.1)
+
+How to create an array containing references???
+Try going through https://rust-unofficial.github.io/too-many-lists/
