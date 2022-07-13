@@ -1,51 +1,51 @@
 use crate::image::Image;
+use ringbuffer::{AllocRingBuffer, RingBufferExt, RingBufferWrite};
 
 pub const UNIVERSE_WIDTH:usize = 300;
 pub const UNIVERSE_HEIGHT:usize = 200;
-const GENERATIONS:usize = 3;
+const GENERATIONS:usize = 4;
 
 pub type Generation = [[u32; UNIVERSE_HEIGHT]; UNIVERSE_WIDTH];
 
 #[derive(Debug)]
 pub struct Universe {
-  generations: [Box<Generation>; GENERATIONS],
-  generation: usize,
+  generations: AllocRingBuffer<Generation>
 }
 
 impl Universe {
   pub fn new(init: fn() -> u32) -> Self {
-    let mut generations: [Box<Generation>; GENERATIONS] = [allocate_generation(); GENERATIONS];
+    let mut generations = AllocRingBuffer::with_capacity(GENERATIONS);
+    generations.push([[init(); UNIVERSE_HEIGHT]; UNIVERSE_WIDTH]);
 
-    fn allocate_generation() -> Box<Generation> {
-      Box::new([[0; UNIVERSE_HEIGHT]; UNIVERSE_WIDTH])
-    }
-
-    Universe {
-      generations,
-      generation: 0
-    }
+    Universe {generations}
   }
 
-
-
-  pub fn evolve(&mut self, calc_next_gen: fn(&Box<Generation>, usize, usize) -> u32) {
-    let last_generation = &self.generations[self.generation];
-    self.generation = (self.generation + 1) % GENERATIONS;
-    let mut current_generation = *self.generations[self.generation];
-    for y in 0..UNIVERSE_HEIGHT-1 {
-      for x in 0..UNIVERSE_WIDTH-1 {
-        current_generation[x][y] = calc_next_gen(last_generation, x, y);
+  pub fn evolve(&mut self, calc_next_gen: fn(&Generation, usize, usize) -> u32) {
+    match self.generations.peek() {
+      Some(last_generation) => {
+        let mut next_gen = [[0; UNIVERSE_HEIGHT]; UNIVERSE_WIDTH];
+        for y in 0..UNIVERSE_HEIGHT-1 {
+          for x in 0..UNIVERSE_WIDTH-1 {
+            next_gen[x][y] = calc_next_gen(last_generation, x, y);
+          }
+        }
+        self.generations.push(next_gen);
       }
+      None => { println!("No generation") }
     }
   }
 
   pub fn render(&mut self) -> Image {
     let mut rendered: Image = Image::new(UNIVERSE_WIDTH, UNIVERSE_HEIGHT);
-    let current_generation = *self.generations[self.generation];
-    for y in 0..UNIVERSE_HEIGHT-1 {
-      for x in 0..UNIVERSE_WIDTH-1 {
-          rendered.plot(x, y, current_generation[x][y]);
+    match self.generations.peek() {
+      Some(current_generation) => {
+        for y in 0..UNIVERSE_HEIGHT-1 {
+          for x in 0..UNIVERSE_WIDTH-1 {
+              rendered.plot(x, y, current_generation[x][y]);
+          }
+        }
       }
+      None => { println!("No generation") }
     }
     rendered
   }
