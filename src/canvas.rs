@@ -34,7 +34,7 @@ impl Canvas {
   }
 
   pub fn fill(&mut self, image : Image) {
-    for n in 0..(self.screen_width * self.screen_height)-1 {
+    for n in 0..(self.screen_width * self.screen_height) {
       let pixel:Pixel = self.buffer_to_world(n);
       self.buffer[n] = image.bytes[pixel.x][pixel.y];
     }
