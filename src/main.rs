@@ -10,19 +10,33 @@ mod graphics_window;
 use graphics_window::GraphicsWindow;
 
 mod evolution;
-use evolution::conways::{evolve, init};
+use evolution::conways::{evolve, init, whoami};
 
+use std::env;
+use std::str::FromStr;
+use std::time::Instant;
+use chrono::offset::Local;
 
 fn main() {
 
-  const WINDOW_WIDTH:usize = 600;
-  const WINDOW_HEIGHT:usize = 400;
+  const WINDOW_WIDTH:usize = 1200;
+  const WINDOW_HEIGHT:usize = 800;
 
   let mut window = GraphicsWindow::new(WINDOW_WIDTH, WINDOW_HEIGHT);
   let mut canvas = Canvas::new(WINDOW_WIDTH, WINDOW_HEIGHT, UNIVERSE_WIDTH, UNIVERSE_HEIGHT);
   let mut universe = Universe::new(init);
 
-  while !window.shutdown() {
+  let args: Vec<String> = env::args().collect();
+  let mut iterations: u128 = u128::MAX;
+
+  let start = Instant::now();
+
+  if args.len() > 1 {
+    iterations = u128::from_str(&args[1]).unwrap();
+  }
+
+  let mut iter:u128 = 0;
+  while !window.shutdown() && iter < iterations {
     // eventually, run these in parallel
     {
       universe.evolve(evolve);
@@ -30,10 +44,16 @@ fn main() {
       window.update(&canvas.buffer);
       sleep();
     }
+    iter += 1;
   }
 
+  let elapsed = start.elapsed().as_millis();
+  println!("Date/time: {}", Local::now());
+  println!("Automata ran {} for {} iterations in {} ms - that's {} ms per iteration.", whoami(), iter, elapsed, elapsed/iter);
+  println!("Universe was {} by {}", UNIVERSE_WIDTH, UNIVERSE_HEIGHT);
+
   fn sleep() {
-    let millis = std::time::Duration::from_millis(100);
+    let millis = std::time::Duration::from_millis(1);
     std::thread::sleep(millis);
   }
 }

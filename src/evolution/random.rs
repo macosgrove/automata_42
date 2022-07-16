@@ -1,5 +1,10 @@
 #![allow(dead_code)]
 use crate::universe::Generation;
+
+pub fn whoami() -> &'static str {
+  "Random"
+}
+
 pub fn init() -> u32 {
   return 0
 }

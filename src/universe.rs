@@ -1,8 +1,8 @@
 use crate::image::Image;
 use ringbuffer::{AllocRingBuffer, RingBufferExt, RingBufferWrite};
 
-pub const UNIVERSE_WIDTH:usize = 150;
-pub const UNIVERSE_HEIGHT:usize = 100;
+pub const UNIVERSE_WIDTH:usize = 600;
+pub const UNIVERSE_HEIGHT:usize = 400;
 const GENERATIONS:usize = 4;
 
 pub type Generation = [[u32; UNIVERSE_HEIGHT]; UNIVERSE_WIDTH];

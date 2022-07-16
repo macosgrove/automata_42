@@ -6,6 +6,10 @@ use crate::universe::{Generation, UNIVERSE_WIDTH, UNIVERSE_HEIGHT};
 const ALIVE:u32 = 0x000000;
 const DEAD:u32 = 0xFFFFFF;
 
+pub fn whoami() -> &'static str {
+  "Conway's Game of Life"
+}
+
 // Begin with random black or white cells
 pub fn init() -> u32 {
   if rand::random() {
