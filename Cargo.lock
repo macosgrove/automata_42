@@ -54,6 +54,7 @@ name = "automata_42"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "hsl",
  "minifb",
  "rand",
  "regex",
@@ -367,6 +368,12 @@ checksum = "62b467343b94ba476dcb2500d242dadbb39557df889310ac77c5d99100aaac33"
 dependencies = [
  "libc",
 ]
+
+[[package]]
+name = "hsl"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "575fb7f1167f3b88ed825e90eb14918ac460461fdeaa3965c6a50951dee1c970"
 
 [[package]]
 name = "humantime"

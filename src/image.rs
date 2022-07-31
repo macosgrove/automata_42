@@ -15,6 +15,7 @@ impl Image {
     }
   }
 
+  //colour is rgb
   pub fn plot(&mut self, x: usize, y: usize, colour: u32) {
     if x >= self.width || y >= self.height  {
         return;

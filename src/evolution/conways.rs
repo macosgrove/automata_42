@@ -1,10 +1,10 @@
 #![allow(dead_code)]
 
-use crate::universe::{Generation, UNIVERSE_WIDTH, UNIVERSE_HEIGHT};
+use crate::{universe::{Generation, UNIVERSE_WIDTH, UNIVERSE_HEIGHT}, colours::{BLACK, WHITE}};
 
 // Conway's Game of Life
-const ALIVE:u32 = 0x000000;
-const DEAD:u32 = 0xFFFFFF;
+const ALIVE:u32 = BLACK;
+const DEAD:u32 = WHITE;
 
 pub fn whoami() -> &'static str {
   "Conway's Game of Life"

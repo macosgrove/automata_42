@@ -1,8 +1,8 @@
-use crate::image::Image;
+use crate::{image::Image, colours::hsl_to_rgb};
 use ringbuffer::{AllocRingBuffer, RingBufferExt, RingBufferWrite};
 
-pub const UNIVERSE_WIDTH:usize = 600;
-pub const UNIVERSE_HEIGHT:usize = 400;
+pub const UNIVERSE_WIDTH:usize = 300;
+pub const UNIVERSE_HEIGHT:usize = 200;
 const GENERATIONS:usize = 4;
 
 pub type Generation = [[u32; UNIVERSE_HEIGHT]; UNIVERSE_WIDTH];
@@ -47,7 +47,7 @@ impl Universe {
       Some(current_generation) => {
         for y in 0..UNIVERSE_HEIGHT {
           for x in 0..UNIVERSE_WIDTH {
-              rendered.plot(x, y, current_generation[x][y]);
+              rendered.plot(x, y, hsl_to_rgb(current_generation[x][y]));
           }
         }
       }
