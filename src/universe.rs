@@ -13,12 +13,12 @@ pub struct Universe {
 }
 
 impl Universe {
-  pub fn new(init: fn() -> u32) -> Self {
+  pub fn new(init: fn(usize, usize) -> u32) -> Self {
     let mut generations = AllocRingBuffer::with_capacity(GENERATIONS);
     let mut first_gen = [[0; UNIVERSE_HEIGHT]; UNIVERSE_WIDTH];
     for y in 0..UNIVERSE_HEIGHT {
       for x in 0..UNIVERSE_WIDTH {
-         first_gen[x][y] = init();
+         first_gen[x][y] = init(x, y);
       }
     }
     generations.push(first_gen);

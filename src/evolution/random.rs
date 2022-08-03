@@ -5,7 +5,7 @@ pub fn whoami() -> &'static str {
   "Random"
 }
 
-pub fn init() -> u32 {
+pub fn init(_x: usize, _y: usize) -> u32 {
   return 0
 }
 

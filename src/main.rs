@@ -10,7 +10,7 @@ mod graphics_window;
 use graphics_window::GraphicsWindow;
 
 mod evolution;
-use evolution::conways::{evolve, init, whoami};
+use evolution::rainbow::{evolve, init, whoami};
 
 use std::env;
 use std::str::FromStr;
@@ -19,8 +19,8 @@ use chrono::offset::Local;
 
 fn main() {
 
-  const WINDOW_WIDTH:usize = 1200;
-  const WINDOW_HEIGHT:usize = 800;
+  const WINDOW_WIDTH:usize = 600;
+  const WINDOW_HEIGHT:usize = 400;
 
   let mut window = GraphicsWindow::new(WINDOW_WIDTH, WINDOW_HEIGHT);
   let mut canvas = Canvas::new(WINDOW_WIDTH, WINDOW_HEIGHT, UNIVERSE_WIDTH, UNIVERSE_HEIGHT);

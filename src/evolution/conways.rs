@@ -11,7 +11,7 @@ pub fn whoami() -> &'static str {
 }
 
 // Begin with random black or white cells
-pub fn init() -> u32 {
+pub fn init(_x: usize, _y: usize) -> u32 {
   if rand::random() {
     return ALIVE
   } else {

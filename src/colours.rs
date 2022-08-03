@@ -23,6 +23,17 @@ pub fn hsl_to_h_s_l(hsl:u32) -> (f64, f64, f64) {
   let adj_l = (l-1) as f64/254.0;
   return ((h % 360) as f64, adj_s, adj_l);
 }
+fn f_to_h(f: f64) -> u32 {
+  if f <= 0.0 { return 0 };
+  cmp::max(cmp::min((f * 254.0) as u32, 254), 0) + 1
+}
+
+pub fn h_s_l_to_hsl(h:f64, s:f64, l:f64) -> u32 {
+  let bounded_s = f_to_h(s);
+  let bounded_l = f_to_h(l);
+  let bounded_h = (h as u32) % 360;
+  return (bounded_h << 16) + (bounded_s << 8) + bounded_l;
+}
 
 pub fn r_g_b_to_rgb(r:u8, g:u8, b:u8) -> u32 {
   ((r as u32) << 16) + ((g as u32) << 8) + (b as u32)
@@ -50,7 +61,7 @@ use super::hsl_to_h_s_l;
   #[rstest]
   #[case(0x00000000, 0.0, 0.0, 0.0)]
   #[case(0x00000101, 0.0, 0.0, 0.0)] // 0x00 and 0x01 are both treated as 0 so that 0x80 can be 0.5 and 0xff can be 1.0
-  #[case(0x01680000, 0.0, 0.0, 0.0)] // hue wraps back around to red at 360
+  #[case(0x01680000, 0.0, 0.0, 0.0)] // hue wraps back around to red at 360 = 0x168
   #[case(0x01698080, 1.0, 0.5, 0.5)]
   #[case(0x00b4ffff, 180.0, 1.0, 1.0)] // sat and lum max out at 255 => 1
   #[case(0xffffffff, 15.0, 1.0, 1.0)] // hue keeps wrapping up to #ffff
@@ -59,6 +70,18 @@ use super::hsl_to_h_s_l;
     assert!((h - exp_h).abs() < 0.0001);
     assert!((s - exp_s).abs() < 0.0001);
     assert!((l - exp_l).abs() < 0.0001);
+  }
+
+  #[rstest]
+  #[case(0.0,   0.0, 0.0, 0x00000000)]
+  #[case(360.0, 0.5, 0.5, 0x00008080)] // hue wraps from 360 to 0 (red)
+  #[case(361.0, 0.5, 0.5, 0x00018080)]
+  #[case(120.0, 1.0, 1.0, 0x0078ffff)] // sat and lum max out at 1 => #ff
+  #[case(120.0, 10.0, 100.0, 0x0078ffff)]
+  #[case(-15.0,  -1.0, -100.0, 0x00000000)] // negative floats go to 0
+  fn test_h_s_l_to_hsl(#[case] h:f64, #[case] s:f64, #[case] l:f64, #[case] exp_hsl:u32) {
+    let hsl = h_s_l_to_hsl(h, s, l);
+    assert_eq!(hsl, exp_hsl);
   }
 
   #[rstest]
