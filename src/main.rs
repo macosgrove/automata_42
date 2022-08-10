@@ -1,3 +1,7 @@
+mod evolution;
+// Swap to any of the evolution algorithms by placing its name between the ::s below
+use evolution::rainbow::{evolve, init, whoami};
+
 mod canvas;
 use canvas::Canvas;
 
@@ -8,9 +12,6 @@ mod colours;
 mod image;
 mod graphics_window;
 use graphics_window::GraphicsWindow;
-
-mod evolution;
-use evolution::rainbow::{evolve, init, whoami};
 
 use std::env;
 use std::str::FromStr;
