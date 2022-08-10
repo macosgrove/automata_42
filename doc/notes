@@ -30,3 +30,25 @@ Rust by example https://doc.rust-lang.org/rust-by-example (up to 1.2.1)
 
 How to create an array containing references???
 Try going through https://rust-unofficial.github.io/too-many-lists/
+
+
+Think about how to make a random number generator available to evolution algorithms.
+Would be nice to be able to set a random seed - something like this:
+
+use rand::prelude::*;
+use rand_chacha::ChaCha8Rng;
+
+struct Random {
+  rng: ChaCha8Rng,
+}
+
+impl Random {
+  pub fn new(seed: u64) -> Self {
+    let rng: ChaCha8Rng = ChaCha8Rng::seed_from_u64(seed);
+    Random { rng }
+  }
+
+  pub fn random(&mut self, max: u8) {
+    self.rng.gen_range(0..=max);
+  }
+}

@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 rand = "0.8.3"
+rand_chacha = "0.3.1"
 minifb = "0.20.0"
 regex = "1"
 ringbuffer = "0.8.4"

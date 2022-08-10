@@ -57,6 +57,7 @@ dependencies = [
  "hsl",
  "minifb",
  "rand",
+ "rand_chacha",
  "regex",
  "ringbuffer",
  "rstest",
