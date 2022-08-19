@@ -13,6 +13,8 @@ So far three algorithms have been written:
 
 You can see brief videos of each of these algorithms in my [Cellular Automata YouTube playlist](https://www.youtube.com/playlist?list=PLrV7ju1PHCWzTkbu4PmWoJK8-MdH80Jcu)
 
+Another algorithm - quantum - is in development.
+
 Colour is represented as 32 bit integers (u32 in Rust) in the form #0hhhssll, where h is hue, s is saturation and l is luminance.
 Hue ranges from 0..360. Values over 359 will be wrapped around. Sat and Lum range from 0..256, which then get mapped to 0...1.
 See the unit tests in `./src/colours.rs` for tips about colour.
@@ -55,13 +57,15 @@ To add an algorithm:
 * add a file for the algorithm to the `evolution` folder
 * implement three functions:
   * `whoami() -> &'static str`,
-  * `init(x: usize, y: usize) -> u32`, and
-  * `evolve(last_generation: &Generation, x:usize, y:usize) -> u32`.
+  * `init(x: usize, y: usize, rng: &mut Random) -> u32`, and
+  * `evolve(last_generation: &Generation, x:usize, y:usize, rng: &mut Random) -> u32`.
 * list the new algorithm in `./src/evolution/mod.rs`.
 
-`init()` is called to initialise the universe. It takes the position of the cell and should return the colour you want to set the new cell to, in #0hhhssll format (see the introduction above). Check out `./src/colours.rs` for some handy colour functions.
+`init()` is called to initialise the universe. It takes the position of the cell and a random number generator. It should return the colour you want to set the new cell to, in #0hhhssll format (see the introduction above). Check out `./src/colours.rs` for some handy colour functions.
 
-`evolve()` is called at each generation to calculate the new state of all cells. The function takes the state of the universe in the last generation and the location of the current cell. Like `init()`, `evolve` returns a colour in #0hhhssll format.
+`evolve()` is called at each generation to calculate the new state of all cells. The function takes the state of the universe in the last generation, the location of the current cell, and a random number generator. Like `init()`, `evolve` returns a colour in #0hhhssll format.
+
+The random number generator is created in `universe.rs` with a random seed. The seed is printed to the console. You can repeat a run by copying the random seed and passing it as a parameter when the random number generator is created in `universe.rs`.
 
 ## Extensions
 

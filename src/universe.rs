@@ -1,4 +1,4 @@
-use crate::{image::Image, colours::hsl_to_rgb};
+use crate::{image::Image, colours::hsl_to_rgb, random::Random};
 use ringbuffer::{AllocRingBuffer, RingBufferExt, RingBufferWrite};
 
 pub const UNIVERSE_WIDTH:usize = 300;
@@ -9,30 +9,33 @@ pub type Generation = [[u32; UNIVERSE_HEIGHT]; UNIVERSE_WIDTH];
 
 #[derive(Debug)]
 pub struct Universe {
-  generations: AllocRingBuffer<Generation>
+  generations: AllocRingBuffer<Generation>,
+  rng: Random,
 }
 
 impl Universe {
-  pub fn new(init: fn(usize, usize) -> u32) -> Self {
+  pub fn new(init: fn(usize, usize, &mut Random) -> u32) -> Self {
     let mut generations = AllocRingBuffer::with_capacity(GENERATIONS);
     let mut first_gen = [[0; UNIVERSE_HEIGHT]; UNIVERSE_WIDTH];
+    let mut rng: Random = Random::new(rand::random::<u64>());
+
     for y in 0..UNIVERSE_HEIGHT {
       for x in 0..UNIVERSE_WIDTH {
-         first_gen[x][y] = init(x, y);
+         first_gen[x][y] = init(x, y, &mut rng);
       }
     }
     generations.push(first_gen);
 
-    Universe {generations}
+    Universe {generations, rng}
   }
 
-  pub fn evolve(&mut self, calc_next_gen: fn(&Generation, usize, usize) -> u32) {
+  pub fn evolve(&mut self, calc_next_gen: fn(&Generation, usize, usize, &mut Random) -> u32) {
     match self.generations.peek() {
       Some(last_generation) => {
         let mut next_gen = [[0; UNIVERSE_HEIGHT]; UNIVERSE_WIDTH];
         for y in 0..UNIVERSE_HEIGHT {
           for x in 0..UNIVERSE_WIDTH {
-            next_gen[x][y] = calc_next_gen(last_generation, x, y);
+            next_gen[x][y] = calc_next_gen(last_generation, x, y, &mut self.rng);
           }
         }
         self.generations.push(next_gen);

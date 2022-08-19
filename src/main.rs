@@ -1,6 +1,6 @@
 mod evolution;
 // Swap to any of the evolution algorithms by placing its name between the ::s below
-use evolution::rainbow::{evolve, init, whoami};
+use evolution::conways::{evolve, init, whoami};
 
 mod canvas;
 use canvas::Canvas;
@@ -8,6 +8,7 @@ use canvas::Canvas;
 mod universe;
 use universe::{Universe, UNIVERSE_WIDTH, UNIVERSE_HEIGHT};
 
+mod random;
 mod colours;
 mod image;
 mod graphics_window;

@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 
 use crate::{universe::{Generation, UNIVERSE_WIDTH, UNIVERSE_HEIGHT}, colours::{BLACK, WHITE}};
+use crate::random::Random;
 
 // Conway's Game of Life
 const ALIVE:u32 = BLACK;
@@ -11,8 +12,8 @@ pub fn whoami() -> &'static str {
 }
 
 // Begin with random black or white cells
-pub fn init(_x: usize, _y: usize) -> u32 {
-  if rand::random() {
+pub fn init(_x: usize, _y: usize, rng: &mut Random) -> u32 {
+  if rng.random_bool() {
     return ALIVE
   } else {
     return DEAD
@@ -23,7 +24,7 @@ pub fn init(_x: usize, _y: usize) -> u32 {
 // If a cell is 'alive' (black), stay alive if the cell has 2 or 3 live neighbours
 // (3 or 4 live cells in its 3x3 neighbourhood including itself)
 // If a cell is 'dead', become alive only if it has exactly 3 neighbours (3 live cells in its neighbourhood)
-pub fn evolve(last_generation: &Generation, x:usize, y:usize) -> u32 {
+pub fn evolve(last_generation: &Generation, x:usize, y:usize, _rng: &mut Random) -> u32 {
   let live_neighbours = count_live_neighbours(last_generation, x, y);
   if last_generation[x][y] == ALIVE {
     if live_neighbours == 3 || live_neighbours == 4 {
