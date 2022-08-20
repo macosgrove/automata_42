@@ -22,4 +22,13 @@ impl Random {
   pub fn random_bool(&mut self) -> bool {
     return self.rng.gen_range(0..=1) == 1;
   }
+
+  pub fn random_one(&mut self) -> f64 {
+    return self.rng.gen_range(0.0f64..=1.0f64)
+  }
+
+  pub fn random_weighted_bool(&mut self, frequency: u32) -> bool {
+    let rand = self.rng.gen_range(0..frequency);
+    return  rand == 0
+  }
 }

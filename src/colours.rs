@@ -9,13 +9,13 @@ use hsl::HSL;
 //In this package we wrap the value of H so it can range from 0x0000 to 0xffff
 //s and l are adjusted so that 0x0 and 0x1 are both 0.0, 0x80 is 0.5 and 0xff is 1.0
 pub fn hsl_to_rgb(hsl: u32) -> u32 {
-  let (h, s, l) = hsl_to_h_s_l(hsl);
+  let (h, s, l) = hsl_to_h_s_l_f64(hsl);
   let hsl = HSL {h: h, s: s, l: l};
   let (r, g, b) = hsl.to_rgb();
   r_g_b_to_rgb(r, g, b)
 }
 
-pub fn hsl_to_h_s_l(hsl:u32) -> (f64, f64, f64) {
+pub fn hsl_to_h_s_l_f64(hsl:u32) -> (f64, f64, f64) {
   let h = (hsl & 0xffff0000) >> 16;
   let s = cmp::max((hsl & 0x0000ff00) >> 8, 1);
   let l = cmp::max(hsl & 0x000000ff, 1);
@@ -28,7 +28,7 @@ fn f_to_h(f: f64) -> u32 {
   cmp::max(cmp::min((f * 254.0) as u32, 254), 0) + 1
 }
 
-pub fn h_s_l_to_hsl(h:f64, s:f64, l:f64) -> u32 {
+pub fn h_s_l_to_hsl_f64(h:f64, s:f64, l:f64) -> u32 {
   let bounded_s = f_to_h(s);
   let bounded_l = f_to_h(l);
   let bounded_h = (h as u32) % 360;
@@ -44,7 +44,7 @@ mod tests {
   use rstest::*;
   use crate::colours::*;
 
-use super::hsl_to_h_s_l;
+use super::hsl_to_h_s_l_f64;
 
   #[rstest]
   #[case(0x00a800ff, 0xffffff)] //anything with full lum and 0 sat is white
@@ -65,8 +65,8 @@ use super::hsl_to_h_s_l;
   #[case(0x01698080, 1.0, 0.5, 0.5)]
   #[case(0x00b4ffff, 180.0, 1.0, 1.0)] // sat and lum max out at 255 => 1
   #[case(0xffffffff, 15.0, 1.0, 1.0)] // hue keeps wrapping up to #ffff
-  fn test_hsl_to_h_s_l(#[case] hsl:u32, #[case] exp_h:f64, #[case] exp_s:f64, #[case] exp_l:f64) {
-    let(h, s, l) = hsl_to_h_s_l(hsl);
+  fn test_hsl_to_h_s_l_f64(#[case] hsl:u32, #[case] exp_h:f64, #[case] exp_s:f64, #[case] exp_l:f64) {
+    let(h, s, l) = hsl_to_h_s_l_f64(hsl);
     assert!((h - exp_h).abs() < 0.0001);
     assert!((s - exp_s).abs() < 0.0001);
     assert!((l - exp_l).abs() < 0.0001);
@@ -79,8 +79,8 @@ use super::hsl_to_h_s_l;
   #[case(120.0, 1.0, 1.0, 0x0078ffff)] // sat and lum max out at 1 => #ff
   #[case(120.0, 10.0, 100.0, 0x0078ffff)]
   #[case(-15.0,  -1.0, -100.0, 0x00000000)] // negative floats go to 0
-  fn test_h_s_l_to_hsl(#[case] h:f64, #[case] s:f64, #[case] l:f64, #[case] exp_hsl:u32) {
-    let hsl = h_s_l_to_hsl(h, s, l);
+  fn test_h_s_l_to_hsl_f64(#[case] h:f64, #[case] s:f64, #[case] l:f64, #[case] exp_hsl:u32) {
+    let hsl = h_s_l_to_hsl_f64(h, s, l);
     assert_eq!(hsl, exp_hsl);
   }
 
