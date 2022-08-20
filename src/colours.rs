@@ -23,20 +23,20 @@ pub fn hsl_to_h_s_l_f64(hsl:u32) -> (f64, f64, f64) {
   let adj_l = (l-1) as f64/254.0;
   return ((h % 360) as f64, adj_s, adj_l);
 }
-fn f_to_h(f: f64) -> u32 {
-  if f <= 0.0 { return 0 };
-  cmp::max(cmp::min((f * 254.0) as u32, 254), 0) + 1
-}
-
-pub fn h_s_l_to_hsl_f64(h:f64, s:f64, l:f64) -> u32 {
-  let bounded_s = f_to_h(s);
-  let bounded_l = f_to_h(l);
-  let bounded_h = (h as u32) % 360;
-  return (bounded_h << 16) + (bounded_s << 8) + bounded_l;
-}
 
 pub fn r_g_b_to_rgb(r:u8, g:u8, b:u8) -> u32 {
-  ((r as u32) << 16) + ((g as u32) << 8) + (b as u32)
+ return  ((r as u32) << 16) + ((g as u32) << 8) + (b as u32)
+}
+
+pub fn h_s_l_to_hsl(h:u16, s:u8, l:u8) -> u32 {
+  return ((h as u32) << 16) + ((s as u32) << 8) + (l as u32)
+}
+
+pub fn hsl_to_h_s_l(hsl: u32) -> (u16, u8, u8) {
+  let h = ((hsl & 0xffff0000) >> 16) as u16;
+  let s = ((hsl & 0x0000ff00) >> 8) as u8;
+  let l = (hsl & 0x000000ff) as u8;
+  return (h, s, l)
 }
 
 #[cfg(test)]
@@ -73,18 +73,6 @@ use super::hsl_to_h_s_l_f64;
   }
 
   #[rstest]
-  #[case(0.0,   0.0, 0.0, 0x00000000)]
-  #[case(360.0, 0.5, 0.5, 0x00008080)] // hue wraps from 360 to 0 (red)
-  #[case(361.0, 0.5, 0.5, 0x00018080)]
-  #[case(120.0, 1.0, 1.0, 0x0078ffff)] // sat and lum max out at 1 => #ff
-  #[case(120.0, 10.0, 100.0, 0x0078ffff)]
-  #[case(-15.0,  -1.0, -100.0, 0x00000000)] // negative floats go to 0
-  fn test_h_s_l_to_hsl_f64(#[case] h:f64, #[case] s:f64, #[case] l:f64, #[case] exp_hsl:u32) {
-    let hsl = h_s_l_to_hsl_f64(h, s, l);
-    assert_eq!(hsl, exp_hsl);
-  }
-
-  #[rstest]
   #[case(0x00, 0x00, 0x00, 0x00000000)]
   #[case(0xff, 0x00, 0x00, 0x00ff0000)]
   #[case(0xff, 0xbb, 0x00, 0x00ffbb00)]
@@ -92,4 +80,29 @@ use super::hsl_to_h_s_l_f64;
   fn test_r_g_b_to_rgb(#[case] r: u8, #[case] g: u8, #[case] b: u8, #[case] exp_rgb: u32) {
     assert_eq!(r_g_b_to_rgb(r, g, b), exp_rgb);
   }
+
+  #[rstest]
+  #[case(0x00000000, 0, 0, 0,)]
+  #[case(0x00000101, 0, 0x1, 0x1)]
+  #[case(0x01680000, 0x168, 0, 0)]
+  #[case(0x01698080, 0x169, 0x80, 0x80)]
+  #[case(0x00b4ffff, 0x00b4, 0xff, 0xff)] // sat and lum max out at 255 => 1
+  #[case(0xffffffff, 0xffff, 0xff, 0xff)] // hue keeps wrapping up to #ffff
+  fn test_hsl_to_h_s_l(#[case] hsl:u32, #[case] exp_h:u16, #[case] exp_s:u8, #[case] exp_l:u8) {
+    let(h, s, l) = hsl_to_h_s_l(hsl);
+    assert_eq!(h, exp_h);
+    assert_eq!(s, exp_s);
+    assert_eq!(l, exp_l);
+  }
+
+  #[rstest]
+  #[case(0x00, 0x00, 0x00, 0x00000000)]
+  #[case(0xff, 0x00, 0x00, 0x00ff0000)]
+  #[case(0xff, 0xbb, 0x00, 0x00ffbb00)]
+  #[case(0x00, 0xbb, 0x11, 0x0000bb11)]
+  #[case(0x1234, 0xbb, 0x11, 0x1234bb11)]
+  fn test_h_s_l_to_hsl(#[case] h: u16, #[case] s: u8, #[case] l: u8, #[case] exp_hsl: u32) {
+    assert_eq!(h_s_l_to_hsl(h, s, l), exp_hsl);
+  }
+
 }

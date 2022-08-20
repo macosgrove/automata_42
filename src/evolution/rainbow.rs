@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-use crate::{universe::{Generation, UNIVERSE_WIDTH, UNIVERSE_HEIGHT}, colours::{hsl_to_h_s_l_f64, h_s_l_to_hsl_f64}};
+use crate::{universe::{Generation, UNIVERSE_WIDTH, UNIVERSE_HEIGHT}, colours::{hsl_to_h_s_l, h_s_l_to_hsl}};
 use crate::random::Random;
 
 pub fn whoami() -> &'static str {
@@ -7,12 +7,12 @@ pub fn whoami() -> &'static str {
 }
 
 pub fn init(x: usize, y: usize, _rng: &mut Random) -> u32 {
-  let h:f64 = (x as f64)/(UNIVERSE_WIDTH as f64) * 360.0;
-  let s:f64 = (y as f64)/(UNIVERSE_HEIGHT as f64);
-  return h_s_l_to_hsl_f64(h, s, 0.5)
+  let h:u16 = ((x as f32)/(UNIVERSE_WIDTH as f32) * 360.0) as u16;
+  let s:u8 = ((y as f32)/(UNIVERSE_HEIGHT as f32) * 256.0) as u8;
+  return h_s_l_to_hsl(h, s, 0x80)
 }
 
 pub fn evolve(last_generation: &Generation, x:usize, y:usize, _rng: &mut Random) -> u32 {
-  let (h, s, l) = hsl_to_h_s_l_f64(last_generation[x][y]);
-  h_s_l_to_hsl_f64(h + 10.0, s, l)
+  let (h, s, l) = hsl_to_h_s_l(last_generation[x][y]);
+  h_s_l_to_hsl(h + 10, s, l)
 }
