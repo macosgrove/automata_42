@@ -30,7 +30,7 @@ impl Universe {
   }
 
   pub fn evolve(&mut self, calc_next_gen: fn(&Generation, usize, usize, &mut Random) -> u32) {
-    match self.generations.peek() {
+    match self.generations.get(-1) {
       Some(last_generation) => {
         let mut next_gen = [[0; UNIVERSE_HEIGHT]; UNIVERSE_WIDTH];
         for y in 0..UNIVERSE_HEIGHT {

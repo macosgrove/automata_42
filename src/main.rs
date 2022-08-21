@@ -1,6 +1,6 @@
 mod evolution;
 // Swap to any of the evolution algorithms by placing its name between the ::s below
-use evolution::rainbow::{evolve, init, whoami};
+use evolution::conways::{evolve, init, whoami};
 
 mod canvas;
 use canvas::Canvas;
